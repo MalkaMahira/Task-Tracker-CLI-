@@ -111,10 +111,7 @@ def main():
     list_parser.add_argument("status", nargs="?", choices=["todo", "in-progress", "done"], help="Filter by status")
 
     # Parse arguments
-    if get_ipython() is not None:  # If in IPython/Jupyter
-        args = parser.parse_args([])  # Parse without sys.argv
-    else:  # If running as a standalone script
-        args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args([])
 
     # Command execution
     if args.command == "add":
