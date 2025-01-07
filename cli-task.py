@@ -31,25 +31,33 @@ def load_tasks():
 
 # Save tasks to JSON file
 def save_tasks(tasks):
-    with open(TASKS_FILE, "w") as f:
-        json.dump(tasks, f, indent=4)
+    try:
+        with open(TASKS_FILE, "w", encoding="utf-8") as file:
+            json.dump(tasks, file, indent=4)
+    except Exception as e:
+        print(f"An error occurred while saving tasks: {e}")
+
 
 # Add a new task
 def add_task(description):
     tasks = load_tasks()
-    task_id = len(tasks) + 1
-    now = datetime.now().isoformat()
+
+    # Create a new task object
     new_task = {
-        "id": task_id,
+        "id": len(tasks) + 1,
         "description": description,
         "status": "todo",
-        "createdAt": now,
-        "updatedAt": now,
+        "createdAt": datetime.now().isoformat(),
+        "updatedAt": datetime.now().isoformat(),
     }
-    tasks.append(new_task)
-    save_tasks(tasks)
-    print(f"Task added successfully (ID: {task_id})")
 
+    # Append the new task to the list
+    tasks.append(new_task)
+
+    # Save the updated task list to the JSON file
+    save_tasks(tasks)
+
+    print(f"Task added: {description}")
 # Update a task
 def update_task(task_id, description):
     tasks = load_tasks()
@@ -107,7 +115,8 @@ def main():
             print()  # New line for readability
     else:
         print("No tasks found in tasks.json. The file may be empty or improperly formatted.")
-
+    
+    # argument parser
     parser = argparse.ArgumentParser(description="Task Tracker CLI")
     subparsers = parser.add_subparsers(dest="command", help="Commands")
 
@@ -133,8 +142,8 @@ def main():
     list_parser = subparsers.add_parser("list", help="List tasks")
     list_parser.add_argument("status", nargs="?", choices=["todo", "in-progress", "done"], help="Filter by status")
 
-    # Parse arguments
-    args = parser.parse_args([])
+    # Parse arguments from the command line
+    args = parser.parse_args()
 
     # Command execution
     if args.command == "add":
@@ -149,6 +158,5 @@ def main():
         list_tasks(args.status)
     else:
         parser.print_help()
-
 if __name__ == "__main__":
     main()
