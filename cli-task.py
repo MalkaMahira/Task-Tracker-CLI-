@@ -4,23 +4,30 @@ import os
 import sys
 from datetime import datetime
 
-# Filepath for the JSON file
 TASKS_FILE = "tasks.json"
 
-# Ensure the tasks file exists
+
+# Ensure the tasks.json file exists and initialize if needed
 def ensure_file_exists():
     if not os.path.exists(TASKS_FILE):
-        with open(TASKS_FILE, "w") as f:
-            json.dump([], f)
+        with open(TASKS_FILE, "w", encoding="utf-8") as file:
+            json.dump([], file)  # Initialize with an empty list
 
-# Load tasks from JSON file
+
+# Load tasks from tasks.json
 def load_tasks():
-    ensure_file_exists()
-    with open(TASKS_FILE, "r") as f:
-        try:
-            return json.load(f)
-        except json.JSONDecodeError:
-            return []
+    try:
+        with open(TASKS_FILE, "r", encoding="utf-8") as file:
+            data = file.read()
+            if not data.strip():  # Handle empty file
+                return []
+            return json.loads(data)
+    except json.JSONDecodeError:
+        print(f"Error: Could not parse JSON data in {TASKS_FILE}. Initializing a new file.")
+        return []
+    except Exception as e:
+        print(f"An unexpected error occurred while loading tasks: {e}")
+        return []
 
 # Save tasks to JSON file
 def save_tasks(tasks):
@@ -83,8 +90,24 @@ def list_tasks(status=None):
     for task in filtered_tasks:
         print(f"ID: {task['id']}, Description: {task['description']}, Status: {task['status']}, Created: {task['createdAt']}, Updated: {task['updatedAt']}")
 
-# CLI entry point
+
+# Main program logic
 def main():
+    # Ensure tasks.json exists
+    ensure_file_exists()
+
+    # Load tasks from tasks.json
+    tasks = load_tasks()
+
+    # Print tasks if available
+    if tasks:
+        print("Tasks in the tasks.json file:\n")
+        for task in tasks:
+            print("Entire Task Dictionary:", task)  # Print full dictionary
+            print()  # New line for readability
+    else:
+        print("No tasks found in tasks.json. The file may be empty or improperly formatted.")
+
     parser = argparse.ArgumentParser(description="Task Tracker CLI")
     subparsers = parser.add_subparsers(dest="command", help="Commands")
 
