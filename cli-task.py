@@ -6,15 +6,14 @@ from datetime import datetime
 
 TASKS_FILE = "tasks.json"
 
-
-# Ensure the tasks.json file exists and initialize if needed
+# Ensuring the tasks.json file exists and initialize if needed
 def ensure_file_exists():
     if not os.path.exists(TASKS_FILE):
         with open(TASKS_FILE, "w", encoding="utf-8") as file:
             json.dump([], file)  # Initialize with an empty list
 
 
-# Load tasks from tasks.json
+# Loading tasks from tasks.json
 def load_tasks():
     try:
         with open(TASKS_FILE, "r", encoding="utf-8") as file:
@@ -29,7 +28,7 @@ def load_tasks():
         print(f"An unexpected error occurred while loading tasks: {e}")
         return []
 
-# Save tasks to JSON file
+# Saving tasks to JSON file
 def save_tasks(tasks):
     try:
         with open(TASKS_FILE, "w", encoding="utf-8") as file:
@@ -38,11 +37,11 @@ def save_tasks(tasks):
         print(f"An error occurred while saving tasks: {e}")
 
 
-# Add a new task
+# Adds a new task
 def add_task(description):
     tasks = load_tasks()
 
-    # Create a new task object
+    # Creates a new task object
     new_task = {
         "id": len(tasks) + 1,
         "description": description,
@@ -51,14 +50,16 @@ def add_task(description):
         "updatedAt": datetime.now().isoformat(),
     }
 
-    # Append the new task to the list
+    # Appends the new task to the list
     tasks.append(new_task)
 
-    # Save the updated task list to the JSON file
+    # Saves the updated task list to the JSON file
     save_tasks(tasks)
 
     print(f"Task added: {description}")
-# Update a task
+
+
+# Updates a task
 def update_task(task_id, description):
     tasks = load_tasks()
     for task in tasks:
@@ -70,14 +71,14 @@ def update_task(task_id, description):
             return
     print(f"Task with ID {task_id} not found.")
 
-# Delete a task
+# Deletes a task
 def delete_task(task_id):
     tasks = load_tasks()
     tasks = [task for task in tasks if task["id"] != task_id]
     save_tasks(tasks)
     print(f"Task deleted successfully (ID: {task_id})")
 
-# Mark a task with a specific status
+# Marks a task with a specific status
 def mark_task(task_id, status):
     tasks = load_tasks()
     for task in tasks:
@@ -89,7 +90,7 @@ def mark_task(task_id, status):
             return
     print(f"Task with ID {task_id} not found.")
 
-# List tasks (with optional status filtering)
+# Lists tasks
 def list_tasks(status=None):
     tasks = load_tasks()
     filtered_tasks = tasks if not status else [task for task in tasks if task["status"] == status]
@@ -101,22 +102,21 @@ def list_tasks(status=None):
 
 # Main program logic
 def main():
-    # Ensure tasks.json exists
+    # Ensures tasks.json exists
     ensure_file_exists()
 
-    # Load tasks from tasks.json
+    # Loads tasks from tasks.json
     tasks = load_tasks()
 
-    # Print tasks if available
-    if tasks:
-        print("Tasks in the tasks.json file:\n")
-        for task in tasks:
-            print("Entire Task Dictionary:", task)  # Print full dictionary
-            print()  # New line for readability
-    else:
-        print("No tasks found in tasks.json. The file may be empty or improperly formatted.")
+    # Prints tasks if available
+    #if tasks:
+    #    print("Tasks in the tasks.json file:\n")
+    #    for task in tasks:
+    #        print("Entire Task Dictionary:", task)  # Print full dictionary
+    #        print()  # New line for readability
+    #    print("No tasks found in tasks.json. The file may be empty or improperly formatted.")
     
-    # argument parser
+    # Argument parser
     parser = argparse.ArgumentParser(description="Task Tracker CLI")
     subparsers = parser.add_subparsers(dest="command", help="Commands")
 
