@@ -1,10 +1,16 @@
-  [
-     {
-       "id": 1,
-       "description": "Complete the project design",
-       "status": "todo",
-       "createdAt": "2025-01-03T12:00:00",
-       "updatedAt": "2025-01-03T12:00:00"
-     }
-
-  ]
+[
+    {
+        "id": 1,
+        "description": "Learn Advanced Python",
+        "status": "todo",
+        "createdAt": "2025-01-03T12:00:00",
+        "updatedAt": "2025-01-07T19:02:26.685584"
+    },
+    {
+        "id": 2,
+        "description": "Write documentation",
+        "status": "todo",
+        "createdAt": "2025-01-07T18:49:02.022376",
+        "updatedAt": "2025-01-07T18:49:02.022376"
+    }
+]
